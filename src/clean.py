@@ -19,6 +19,8 @@ FILES = {
 
 log = []  # every cleaning action gets recorded here
 
+dropped = []  # every removed row is kept here, with its reason
+
 
 def record(step, column, rows_affected, action, reason):
     log.append({"step": step, "column": column, "rows_affected": int(rows_affected),
@@ -50,8 +52,10 @@ df.loc[df["oldpeak"] < 0, "oldpeak"] = np.nan
 record(3, "oldpeak", n, "set to missing", "ST depression cannot be negative per documentation; treated as invalid entries")
 
 # ---------- 3. DUPLICATES ----------
-n = df.duplicated().sum()
-df = df.drop_duplicates().reset_index(drop=True)
+dup_mask = df.duplicated()
+n = dup_mask.sum()
+dropped.append(df[dup_mask].assign(drop_reason="Exact duplicate record"))
+df = df[~dup_mask]
 record(4, "all", n, "dropped rows", "Exact duplicate records (same patient entered twice)")
 
 # ---------- 4. DROP COLUMNS WITH >50% MISSING ----------
@@ -63,8 +67,10 @@ for col in ["ca", "thal"]:
            f"{pct:.0f}% missing, concentrated in 3 of 4 hospitals; imputing would invent most of the column")
 
 # ---------- 5. DROP ROWS WITH NEGLIGIBLE MISSING ----------
-n = df["restecg"].isna().sum()
-df = df.dropna(subset=["restecg"]).reset_index(drop=True)
+mask = df["restecg"].isna()
+n = mask.sum()
+dropped.append(df[mask].assign(drop_reason="Missing restecg (under 1% of rows)"))
+df = df[~mask].reset_index(drop=True)
 record(6, "restecg", n, "dropped rows", "Only a handful of rows (<1%); imputing not worth the bias")
 
 # ---------- 6. IMPUTE (with a flag column so every fill is traceable) ----------
@@ -92,6 +98,8 @@ df[int_cols] = df[int_cols].astype(int)
 # ---------- 8. SAVE ----------
 df.to_csv(CLEAN / "heart_disease_clean.csv", index=False)
 pd.DataFrame(log).to_csv(REPORTS / "cleaning_log.csv", index=False)
+(pd.concat(dropped).rename_axis("original_row").reset_index()
+   .to_csv(REPORTS / "dropped_rows.csv", index=False))
 print(pd.DataFrame(log).to_string(index=False))
 print("\nFinal shape:", df.shape)
 print("Remaining nulls:", int(df.isna().sum().sum()))

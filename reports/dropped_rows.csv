@@ -1,0 +1,5 @@
+original_row,age,sex,cp,trestbps,chol,fbs,restecg,thalach,exang,oldpeak,slope,ca,thal,num,source,drop_reason
+405,49.0,0.0,2.0,110.0,,0.0,0.0,160.0,0.0,0.0,,,,0,hungarian,Exact duplicate record
+907,58.0,1.0,3.0,150.0,219.0,0.0,1.0,118.0,1.0,0.0,,,,2,va,Exact duplicate record
+571,55.0,1.0,1.0,140.0,295.0,0.0,,136.0,0.0,0.0,,,,1,hungarian,Missing restecg (under 1% of rows)
+598,34.0,1.0,4.0,115.0,,,,154.0,0.0,0.2,1.0,,,1,switzerland,Missing restecg (under 1% of rows)
