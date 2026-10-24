@@ -1,0 +1,15 @@
+step,column,rows_affected,action,reason
+1,chol,172,set to missing,Cholesterol of 0 mg/dl is physiologically impossible; means not measured
+2,trestbps,1,set to missing,Resting blood pressure of 0 is impossible
+3,oldpeak,12,set to missing,ST depression cannot be negative per documentation; treated as invalid entries
+4,all,2,dropped rows,Exact duplicate records (same patient entered twice)
+5,ca,609,dropped column,"66% missing, concentrated in 3 of 4 hospitals; imputing would invent most of the column"
+5,thal,484,dropped column,"53% missing, concentrated in 3 of 4 hospitals; imputing would invent most of the column"
+6,restecg,2,dropped rows,Only a handful of rows (<1%); imputing not worth the bias
+7,trestbps,60,imputed with median (130.0),Median is robust to the outliers we deliberately kept
+7,chol,200,imputed with median (239.5),Median is robust to the outliers we deliberately kept
+7,thalach,55,imputed with median (140.0),Median is robust to the outliers we deliberately kept
+7,oldpeak,74,imputed with median (0.5),Median is robust to the outliers we deliberately kept
+7,fbs,89,imputed with mode (0.0),Categorical/binary column; most frequent value used
+7,exang,55,imputed with mode (0.0),Categorical/binary column; most frequent value used
+7,slope,306,imputed with mode (2.0),Categorical/binary column; most frequent value used

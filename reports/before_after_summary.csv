@@ -1,0 +1,6 @@
+metric,before,after
+rows,920,916
+feature columns,14,12
+missing values (NaN),1759,0
+impossible values,185,0
+duplicate rows,2,0
