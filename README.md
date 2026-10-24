@@ -47,6 +47,7 @@ Python 3, pandas, NumPy, matplotlib (all free and open source)
 │   ├── data_quality_audit_report.md
 │   ├── cleaning_log.csv
 │   ├── before_after_summary.csv
+│   ├── dropped_rows.csv  
 │   ├── before_after_columns.csv
 │   └── chol_before_after.png
 └── README.md
